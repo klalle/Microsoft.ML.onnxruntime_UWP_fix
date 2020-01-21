@@ -1,5 +1,5 @@
 # Microsoft.ML.onnxruntime_UWP_fix
-My workaround for deps.json error when .net core project containing onnxruntime-nuget is packad as an UWP using Windows Application Packaging Project in Visual Studio 2019.
+My workaround for deps.json error when .net core 3 project containing onnxruntime-nuget is packad as an UWP using Windows Application Packaging Project in Visual Studio 2019.
 
 ## Error to solve:
 ```
