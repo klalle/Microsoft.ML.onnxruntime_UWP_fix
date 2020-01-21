@@ -2,8 +2,8 @@
 My workaround for deps.json error when .net core 3 project containing onnxruntime-nuget is packad as an UWP using Windows Application Packaging Project in Visual Studio 2019.
 
 ## Error to solve:
-```
 Error in eventlog:
+```
 Description: A .NET Core application failed.
 Application: WinSiftCore.exe
 Path: C:\Program Files\WindowsApps\38749KarlHagstrom.EasyPhotoOrganizer_1.0.70.0_x86__fqsq6epnrsaem\WinSiftCore.exe
@@ -27,7 +27,7 @@ or
 doesn't work either in the packaging project or in the original project. I even tried to build my own version of the nuget, excluding the pdb, but I couldn't get it to work (big project with wierd build-scripts)
 
 ## Works:
-My workaround is to add a postbuildscript on the packaging project that alters the original project output target files. The script replaces the lines referencing the pdb-file in the deps.json-file which is auto-created in output build-paths. This is done before the packaging project is bundeling everything in an .appxbundle and .appxupload.
+My workaround is to add a postbuildscript on the packaging project that alters the original project output target files. The script replaces the lines referencing the pdb-file in the deps.json-file (which is auto-generated in projects output build-paths). This is done before the packaging project is bundeling everything in an .appxbundle and .appxupload.
 
 ## How to: 
 1. to be able to run a ps1-postbuild-script from visual studio according to https://stackoverflow.com/a/6501719 you have to open powershell (x86) as admin and run 
