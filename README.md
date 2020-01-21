@@ -24,10 +24,12 @@ or
 
 <IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
 ```
-doesn't work either in the packaging project or in the original project. I even tried to build my own version of the nuget, excluding the pdb, but I couldn't get it to work (big project with wierd build-scripts)
+doesn't work either in the packaging project or in the referenced project. I even tried to build my own version of the nuget, excluding the pdb, but I couldn't get it to output a nuget (big project with wierd build-scripts)
 
 ## Works:
-My workaround is to add a postbuildscript on the packaging project that alters the original project output target files. The script replaces the lines referencing the pdb-file in the deps.json-file (which is auto-generated in projects output build-paths). This is done before the packaging project is bundeling everything in an .appxbundle and .appxupload.
+My workaround is to add a postbuildscript on the packaging project that alters the referenced project output target files. The script replaces the lines referencing the pdb-file in the deps.json-file (which is auto-generated in reference projects output build-paths). This is done before the packaging project is bundeling everything in an .appxbundle and .appxupload.
+
+Doesn't work to run the script towards the deps.json files created in the packaging project! It has to be the referenced project (even if the referenced project it self doesn't have the nuget containing the pbd-files, but has a referenced project/lib that does).
 
 ## How to: 
 1. to be able to run a ps1-postbuild-script from visual studio according to https://stackoverflow.com/a/6501719 you have to open powershell (x86) as admin and run 
