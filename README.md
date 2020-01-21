@@ -42,4 +42,5 @@ Might be a good idea to change back after you have done this. (couldn't get "-Ex
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -file "C:\.......change_this_to_your_script_path.......\scripts\alter_deps.json.ps1" 
 (It didn't work when using $(ProjectDir) for some reason...
 ```
-3. Alter the file "alter_deps.json.ps1" to match your output-target-paths (remember that the target outputs should be for the referenced project using the onnxruntime-nuget, not the UWP-packaging project target!)
+3. Alter the file "alter_deps.json.ps1" to match your output-target-paths (remember that the target outputs should be for the referenced project using the onnxruntime-nuget, not the UWP-packaging project target!) 
+You might need to copy the lines for more runtimes than x86 and x64 which I am using...
