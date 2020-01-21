@@ -1,5 +1,7 @@
 # Microsoft.ML.onnxruntime_UWP_fix
-My workaround for deps.json error when project containing onnxruntime-nuget is packad as an UWP.
+My workaround for deps.json error when .net core project containing onnxruntime-nuget is packad as an UWP using Windows Application Packaging Project in Visual Studio 2019.
+
+## Error to solve:
 ```
 Error in eventlog:
 Description: A .NET Core application failed.
@@ -10,11 +12,30 @@ Message: Error:
     package: 'Microsoft.ML.OnnxRuntime', version: '1.1.0'
     path: 'runtimes/win-x86/native/onnxruntime.pdb'
 ```
+
+## Doesn't work:
+I tried all sorts of suggested solutions before finding my own that actually worked. 
+Suggestions like 
+```
+<DebugSymbols>false</DebugSymbols>
+<DebugType>None</DebugType>
+
+or
+
+<IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
+```
+doesn't work either in the packaging project or in the original project. I even tried to build my own version of the nuget, excluding the pdb, but I couldn't get it to work (big project with wierd build-scripts)
+
+## Works:
+My workaround is to add a postbuildscript on the packaging project that alters the original project output target files. The script replaces the lines referencing the pdb-file in the deps.json-file which is auto-created in output build-paths. This is done before the packaging project is bundeling everything in an .appxbundle and .appxupload.
+
+## How to: 
 1. to be able to run a ps1-postbuild-script from visual studio according to https://stackoverflow.com/a/6501719 you have to open powershell (x86) as admin and run 
 ```
 Set-ExecutionPolicy RemoteSigned
 (answer Y or A when prompted)
 ```
+Might be a good idea to change back after you have done this. (couldn't get "-ExecutionPolicy Bypass" to work in script)
 
 2. Right-click the Packaging-project and "properties/Build events" and add this to the "Post Build Events":
 ```
