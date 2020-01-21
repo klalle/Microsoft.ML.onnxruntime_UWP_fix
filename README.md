@@ -1,6 +1,7 @@
 # Microsoft.ML.onnxruntime_UWP_fix
 My workaround for deps.json error when project containing onnxruntime-nuget is packad as an UWP.
-```Error in eventlog:
+```
+Error in eventlog:
 Description: A .NET Core application failed.
 Application: WinSiftCore.exe
 Path: C:\Program Files\WindowsApps\38749KarlHagstrom.EasyPhotoOrganizer_1.0.70.0_x86__fqsq6epnrsaem\WinSiftCore.exe
@@ -10,7 +11,8 @@ Message: Error:
     path: 'runtimes/win-x86/native/onnxruntime.pdb'
 ```
 1. to be able to run a ps1-postbuild-script from visual studio according to https://stackoverflow.com/a/6501719 you have to open powershell (x86) as admin and run 
-```Set-ExecutionPolicy RemoteSigned
+```
+Set-ExecutionPolicy RemoteSigned
 (answer Y or A when prompted)
 ```
 
