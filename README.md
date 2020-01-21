@@ -18,6 +18,7 @@ Set-ExecutionPolicy RemoteSigned
 
 2. Right-click the Packaging-project and "properties/Build events" and add this to the "Post Build Events":
 ```
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -file "C:\.......change_this_to_your_script_path.......\scripts\alter_deps.json.ps1" (It didn't work when using $(ProjectDir) for some reason...
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -file "C:\.......change_this_to_your_script_path.......\scripts\alter_deps.json.ps1" 
+(It didn't work when using $(ProjectDir) for some reason...
 ```
 3. Alter the file "alter_deps.json.ps1" to match your output-target-paths (remember that the target outputs should be for the referenced project using the onnxruntime-nuget, not the UWP-packaging project target!)
