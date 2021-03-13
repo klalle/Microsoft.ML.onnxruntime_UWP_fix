@@ -32,17 +32,13 @@ My workaround is to add a postbuildscript on the packaging project that alters t
 Doesn't work to run the script towards the deps.json files created in the packaging project! It has to be the referenced project (even if the referenced project it self doesn't have the nuget containing the pbd-files, but has a referenced project/lib that does).
 
 ## How to: 
-1. to be able to run a ps1-postbuild-script from visual studio according to https://stackoverflow.com/a/6501719 you have to open powershell (x86) as admin and run 
-```
-Set-ExecutionPolicy RemoteSigned
-(answer Y or A when prompted)
-```
-Might be a good idea to change back after you have done this. (couldn't get "-ExecutionPolicy Bypass" to work in script)
+1. You would expect to be able to just add a reference to this script to the "Post-build event command line" section of the Build Events dialog in VS. Unfortunately, if you try to use macros like $(ProjectDir) or $(ConfigurationName), those get wiped away when you attempt to save. Instead, edit project xml and add a new Target, like this:
 
-2. Right-click the Packaging-project and "properties/Build events" and add this to the "Post Build Events":
 ```
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -file "C:\.......change_this_to_your_script_path.......\scripts\alter_deps.json.ps1" 
-(It didn't work when using $(ProjectDir) for some reason...
+  <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -File $(ProjectDir)alter_deps.json.ps1 -Path $(ProjectDir).. -Config $(ConfigurationName)" />
+  </Target>
 ```
-3. Alter the file "alter_deps.json.ps1" to match your output-target-paths (remember that the target outputs should be for the referenced project using the onnxruntime-nuget, not the UWP-packaging project target!) 
-You might need to copy the lines for more runtimes than x86 and x64 which I am using...
+
+2. Alter the file "alter_deps.json.ps1" to match your output-target project (remember that the target outputs should be for the referenced project using the onnxruntime-nuget, not the UWP-packaging project target!) 
+You might need to add more runtimes than x86 and x64 which I am using...
