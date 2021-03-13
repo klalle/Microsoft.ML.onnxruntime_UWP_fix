@@ -1,21 +1,24 @@
-#param([string]$BuildPath)
-[IO.Directory]::SetCurrentDirectory((Convert-Path (Get-Location -PSProvider FileSystem)))
+param([string]$Path, [string]$Config)
 
-#x86
-$filePath = "C:\.....path_to_your_project_referenced_by_UWP.......\obj\x86\Release\netcoreapp3.0\win-x86\Msix\WinSiftCore.deps.json"
-$filetxt = [IO.File]::ReadAllText($filePath)
+"Arguments:"
+"Path: $Path"
+"Config: $Config"
+
+$targetProj = "WinSiftCore" # Replace with your referenced project name
+$archs = "x86","x64"
 $regStr = "(?ms)(,[^}]*pdb.*?})"
-if ($filetxt -match $regStr) { 
-    $matches[0]
-    $filetxt = ($filetxt -replace $regStr, "")
-    Set-Content -Path "$filePath" -Value $filetxt
-}
+$dotnetVersion = "net5.0"
 
-#x64
-$filePath = "C:\.....path_to_your_project_referenced_by_UWP.......\obj\x64\Release\netcoreapp3.0\win-x64\Msix\WinSiftCore.deps.json"
-$filetxt = [IO.File]::ReadAllText($filePath)
-if ($filetxt -match $regStr) { 
-    $matches[0]
-    $filetxt = ($filetxt -replace $regStr, "")
-    Set-Content -Path "$filePath" -Value $filetxt
+foreach ($arch in $archs) {
+    $filePath = Resolve-Path "$Path\$targetProj\obj\$arch\$Config\$dotnetVersion\win-$arch\Msix\$targetProj.deps.json"
+    $exists = [IO.File]::Exists($filePath)
+    "$filePath, exists: $exists"
+    if ($exists) {
+        $content = [IO.File]::ReadAllText($filePath)
+        if ($content -match $regStr) {
+            $matches[0]
+            $content = ($content -replace $regStr, "")
+            Set-Content -Path "$filePath" -Value $content
+        }
+    }
 }
